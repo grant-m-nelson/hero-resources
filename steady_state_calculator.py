@@ -34,6 +34,8 @@ def main():
 
     P = np.zeros((len(filtered_menus), len(filtered_menus)))
 
+    all_perms = []
+
     for idx, current_menu in enumerate(filtered_menus):
         current_idx = menu_index[current_menu]
         remaining_spells = {name: spells[name] for name in spells if name not in current_menu}
@@ -45,22 +47,33 @@ def main():
             for spell in remaining_spells
         }
         valid_next_menus = [next_menu for next_menu in filtered_menus if not any(spell in next_menu for spell in current_menu)]
-        all_perms = [(menu_index[menu], perm) for menu in valid_next_menus for perm in menu_perms[menu]]
+        all_perms += [(
+            current_idx, 
+            menu_index[menu],
+            beginning_odds,
+            remaining_spells[perm[0]], 
+            remaining_spells[perm[1]], 
+            remaining_spells[perm[2]], 
+            remaining_spells[perm[3]], 
+            removal_rolls[perm[0]], 
+            removal_rolls[perm[1]], 
+            removal_rolls[perm[2]], 
+            removal_rolls[perm[3]]) 
+        for menu in valid_next_menus 
+        for perm in menu_perms[menu]]
 
-        df = pd.DataFrame(all_perms, columns=['MenuIndex', 'Permutation'])
-        df[['Spell1', 'Spell2', 'Spell3', 'Spell4']] = pd.DataFrame(df['Permutation'].tolist(), index=df.index)
+    df = pd.DataFrame(all_perms, columns=['CurrentIndex', 'NextIndex', 'BeginningOdds', 
+                                          'Spell1Rolls', 'Spell2Rolls', 'Spell3Rolls', 'Spell4Rolls',
+                                          'Spell1RemovalRolls', 'Spell2RemovalRolls', 'Spell3RemovalRolls', 'Spell4RemovalRolls'])
 
-        for i in range(1, 5):
-            df[f'Spell{i}Rolls'] = df[f'Spell{i}'].map(remaining_spells)
-            df[f'Spell{i}RemovalRolls'] = df[f'Spell{i}'].map(removal_rolls)
+    df['ProbProduct'] = df['Spell1Rolls'] / df['BeginningOdds'] * \
+    df['Spell2Rolls'] / (df['BeginningOdds'] - df['Spell1RemovalRolls']) * \
+    df['Spell3Rolls'] / (df['BeginningOdds'] - df['Spell1RemovalRolls'] - df['Spell2RemovalRolls']) * \
+    df['Spell4Rolls'] / (df['BeginningOdds'] - df['Spell1RemovalRolls'] - df['Spell2RemovalRolls'] - df['Spell3RemovalRolls'])
 
-        df['ProbProduct'] = df['Spell1Rolls'] / beginning_odds * \
-        df['Spell2Rolls'] / (beginning_odds - df['Spell1RemovalRolls']) * \
-        df['Spell3Rolls'] / (beginning_odds - df['Spell1RemovalRolls'] - df['Spell2RemovalRolls']) * \
-        df['Spell4Rolls'] / (beginning_odds - df['Spell1RemovalRolls'] - df['Spell2RemovalRolls'] - df['Spell3RemovalRolls'])
+    result = df.groupby(['CurrentIndex', 'NextIndex'])['ProbProduct'].sum().unstack(fill_value=0)
 
-        result = df.groupby('MenuIndex')['ProbProduct'].sum()
-        P[current_idx, result.index.to_numpy()] = result.to_numpy()
+    P[result.index, result.columns] = result.to_numpy()
 
     P = P / P.sum(axis=1, keepdims=True)
 
