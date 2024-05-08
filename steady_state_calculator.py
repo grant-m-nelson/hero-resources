@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import os
 from itertools import combinations, permutations, product
 
 def apply_modifiers(spells, modifiers):
@@ -71,6 +72,7 @@ def compute_steady_state(spells):
         result = df.groupby('MenuIndex')['ProbProduct'].sum()
         P[current_idx, result.index.to_numpy()] = result.to_numpy()
 
+    print('Steady State Probabilities:')
     P = P / P.sum(axis=1, keepdims=True)
 
     eigenvalues, eigenvectors = np.linalg.eig(P.T)
@@ -82,7 +84,6 @@ def compute_steady_state(spells):
         for spell in menu:
             spell_probabilities[spell] += steady_state[idx]
 
-    print('Steady State Probabilities:')
     for spell, probability in spell_probabilities.items():
         print(f"{spell}: {probability:.6f}")
 
@@ -103,16 +104,24 @@ def main():
     ]
     modifier_combinations = list(product([False, True], repeat=len(modifier_keys)))
 
-    results = []
-    for combination in modifier_combinations:
-        modifiers = dict(zip(modifier_keys, combination))
-        modified_spells = apply_modifiers(spells, modifiers)
-        print(str(modifiers))
-        steady_state_probabilities = compute_steady_state(modified_spells)
-        results.append({**{"modifiers": str(modifiers)}, **steady_state_probabilities})
+    filename = "steady_states.csv"
+    if os.path.exists(filename):
+        df_results = pd.read_csv(filename)
+        existing_modifiers = df_results['modifiers'].tolist()
+        combinations_to_process = [combo for combo in modifier_combinations if str(dict(zip(modifier_keys, combo))) not in existing_modifiers]
+    else:
+        df_results = pd.DataFrame()
+        combinations_to_process = modifier_combinations
 
-    df_results = pd.DataFrame(results)
-    df_results.to_csv("steady_states.csv", index=False)
+    for combination in combinations_to_process:
+        modifiers = dict(zip(modifier_keys, combination))
+        print(str(modifiers))
+        modified_spells = apply_modifiers(spells, modifiers)
+        steady_state_probabilities = compute_steady_state(modified_spells)
+        result = pd.DataFrame([steady_state_probabilities], index=[0])
+        result.insert(0, 'modifiers', str(modifiers))
+        df_results = pd.concat([df_results, result], ignore_index=True)
+        df_results.to_csv(filename, index=False)
 
 if __name__ == '__main__':
     main()
