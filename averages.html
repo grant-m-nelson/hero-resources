@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero's Menu Tools - Menu Averages</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="averages.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Hero's Menu Tools</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="simulator.html">Menu Simulator</a></li>
+                    <li><a href="averages.html">Menu Averages</a></li>
+                    <li><a href="calculator.html">Menu Calculator</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <h1>Menu Averages</h1>
+        <form id="averageForm">
+            <!-- Checkboxes for the modifiers -->
+            <input type="checkbox" id="zoom_modifier" name="zoom_modifier">
+            <label for="zoom_modifier">Zoom Modifier active</label>
+            <br>
+            <input type="checkbox" id="metal_opponent" name="metal_opponent">
+            <label for="metal_opponent">Metal Opponent present</label>
+            <br>
+            <input type="checkbox" id="last_30_seconds" name="last_30_seconds">
+            <label for="last_30_seconds">Last 30 seconds of match</label>
+            <br>
+            <input type="checkbox" id="heal_used_up" name="heal_used_up">
+            <label for="heal_used_up">Heal used up</label>
+            <br>
+            <input type="checkbox" id="psyche_up_active" name="psyche_up_active">
+            <label for="psyche_up_active">Psyche Up active</label>
+            <br>
+            <input type="checkbox" id="oomph_active" name="oomph_active">
+            <label for="oomph_active">Oomph active</label>
+            <br>
+            <input type="checkbox" id="acceleratle_active" name="acceleratle_active">
+            <label for="acceleratle_active">Acceleratle active</label>
+            <br>
+            <input type="checkbox" id="bounce_active" name="bounce_active">
+            <label for="bounce_active">Bounce active</label>
+            <br>
+            <input type="checkbox" id="bounce_modifier" name="bounce_modifier">
+            <label for="bounce_modifier">Bounce Modifier active</label>
+            <br>
+
+            <button type="get_averages">Get Averages</button>
+        </form>
+        <div id="averageResults"></div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 ant_ssb. Feel free to use for whatever with credit :)</p>
+        </div>
+    </footer>
+</body>
+</html>
