@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hero's Menu Tools</title>
+    <title>Hero's Menu Tools - Menu Calculator</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Include steady_states.js which should define the csvData variable -->
+    <script src="steady_states.js"></script>
+    <script src="calculator.js" defer></script>
 </head>
 <body>
     <header>
@@ -22,8 +25,79 @@
     </header>
 
     <div class="container main-content">
-        <h1>Calculator</h1>
-        <p>This tab will display the menu calculator.</p>
+        <h1>Menu Calculator</h1>
+        <p>Use this tool to compute the probabilities of each spell appearing in the next menu based on the current game state, previous menu, and modifiers.</p>
+        
+        <form id="calculatorForm">
+            <h2>Modifiers</h2>
+            <input type="checkbox" id="zoom_modifier" name="zoom_modifier">
+            <label for="zoom_modifier">Zoom Modifier active</label><br>
+            <input type="checkbox" id="metal_opponent" name="metal_opponent">
+            <label for="metal_opponent">Metal Opponent present</label><br>
+            <input type="checkbox" id="last_30_seconds" name="last_30_seconds">
+            <label for="last_30_seconds">Last 30 seconds of match</label><br>
+            <input type="checkbox" id="heal_used_up" name="heal_used_up">
+            <label for="heal_used_up">Heal used up</label><br>
+            <input type="checkbox" id="psyche_up_active" name="psyche_up_active">
+            <label for="psyche_up_active">Psyche Up active</label><br>
+            <input type="checkbox" id="oomph_active" name="oomph_active">
+            <label for="oomph_active">Oomph active</label><br>
+            <input type="checkbox" id="acceleratle_active" name="acceleratle_active">
+            <label for="acceleratle_active">Acceleratle active</label><br>
+            <input type="checkbox" id="bounce_active" name="bounce_active">
+            <label for="bounce_active">Bounce active</label><br>
+            <input type="checkbox" id="bounce_modifier" name="bounce_modifier">
+            <label for="bounce_modifier">Bounce Modifier active</label><br>
+
+            <h2>Previous Menu</h2>
+            <p>Select one of the following options to determine the previous menu spells:</p>
+            <input type="radio" id="option_first_menu" name="prev_menu_option" value="first_menu" checked>
+            <label for="option_first_menu">First Menu (No previous spells)</label><br>
+            
+            <input type="radio" id="option_manual" name="prev_menu_option" value="manual">
+            <label for="option_manual">Manual Selection of Previous Spells</label><br>
+            
+            <input type="radio" id="option_steady_state" name="prev_menu_option" value="steady_state">
+            <label for="option_steady_state">Import from Steady State</label><br><br>
+            
+            <!-- Manual Selection Inputs -->
+            <div id="manualSelection" style="display:none;">
+                <label for="prevSpell1">Previous Spell 1:</label>
+                <select id="prevSpell1"></select><br>
+                <label for="prevSpell2">Previous Spell 2:</label>
+                <select id="prevSpell2"></select><br>
+                <label for="prevSpell3">Previous Spell 3:</label>
+                <select id="prevSpell3"></select><br>
+                <label for="prevSpell4">Previous Spell 4:</label>
+                <select id="prevSpell4"></select><br>
+            </div>
+            
+            <!-- Steady State Selection -->
+            <div id="steadyStateSelection" style="display:none;">
+                <label for="steadyState_select">Select Steady-State Scenario:</label>
+                <select id="steadyState_select">
+                    <option value="none">-- Select a Scenario --</option>
+                    <!-- Dynamic options will be populated by calculator.js -->
+                </select>
+            </div>
+
+            <button type="button" id="calculateButton">Calculate Next Menu Odds</button>
+        </form>
+        
+        <div id="calculatorResults" style="display:none;">
+            <h2>Next Menu Spell Probabilities</h2>
+            <table id="calculatorResultsTable" class="resultsTable">
+                <thead>
+                    <tr>
+                        <th>Spell</th>
+                        <th>Probability of Appearance in Next Menu (%)</th>
+                    </tr>
+                </thead>
+                <tbody id="calculatorResultsBody">
+                    <!-- Filled by JS -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer>
