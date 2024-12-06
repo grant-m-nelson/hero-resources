@@ -9,8 +9,6 @@ const baseSpells = {
     "Hocus Pocus": 3, "Zoom": 15
 };
 
-//3/274*5/271*5/266*5/261
-//18/274*18/256*18/238*17/221
 // Paired spells that cannot co-occur
 const pairedSpells = {
     "Thwack": "Whack", "Whack": "Thwack",
@@ -18,12 +16,6 @@ const pairedSpells = {
     "Sizz": "Sizzle", "Sizzle": "Sizz"
 };
 
-/**
- * Generates all non-repeating permutations of size k from the input array.
- * @param {Array} arr - The input array.
- * @param {number} k - The size of each permutation.
- * @returns {Array} - An array of permutations, each being an array.
- */
 function getPermutations(arr, k) {
     const results = [];
     
@@ -43,12 +35,6 @@ function getPermutations(arr, k) {
     return results;
 }
 
-/**
- * Applies modifiers to the base spells to get modified spells.
- * @param {Object} spells - Base spell odds.
- * @param {Object} modifiers - Active modifiers.
- * @returns {Object} - Modified spell odds.
- */
 function applyModifiers(spells, modifiers) {
     let modifiedSpells = { ...spells };
     if (modifiers.zoomModifier && modifiedSpells["Zoom"] != null) modifiedSpells["Zoom"] *= 3;
@@ -69,81 +55,26 @@ function applyModifiers(spells, modifiers) {
     return modifiedSpells;
 }
 
-/**
- * Parses CSV data and returns an array of scenarios.
- * Each scenario is an object with a name and an array of previous spells.
- * @param {string} csv - The CSV data as a string.
- * @returns {Array} - Array of scenario objects.
- */
-function parseSteadyStates(csv) {
-    const lines = csv.trim().split('\n');
-    const headers = lines[0].split(',').map(header => header.trim().replace(/^"|"$/g, ''));
-    const scenarios = [];
-    
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        if (line === "") continue; // Skip empty lines
-        const values = line.split(',').map(value => value.trim().replace(/^"|"$/g, ''));
-        const scenario = {};
-        headers.forEach((header, index) => {
-            scenario[header] = values[index] || "";
-        });
-        // Extract previous spells
-        const prevSpells = [
-            scenario["Previous Spell 1"],
-            scenario["Previous Spell 2"],
-            scenario["Previous Spell 3"],
-            scenario["Previous Spell 4"]
-        ].filter(spell => spell !== "");
-        scenarios.push({
-            name: scenario["Scenario Name"] || `Scenario ${i}`,
-            spells: prevSpells
-        });
-    }
-    return scenarios;
-}
-
-/**
- * Computes the probability of each spell appearing in any slot using sequential selection.
- * @param {Object} spells - Object containing spell names and their modified odds.
- * @param {Array} previousMenu - Array of spells present in the previous menu.
- * @returns {Object} - Object containing spells and their probabilities as formatted strings.
- */
 function computeNextMenuOdds(spells, previousMenu) {
-    // 1. Exclude previous menu spells
     let availableSpells = { ...spells };
     previousMenu.forEach(spell => {
         delete availableSpells[spell];
     });
 
-    // Debug: Log available spells after exclusion
-    console.log('Available Spells after exclusion:', availableSpells);
-
-    // 2. List of available spell names
     const availableSpellNames = Object.keys(availableSpells);
-
-    // 3. Generate all possible 4-spell combinations
     let allMenus = getPermutations(availableSpellNames, 4);
 
-    // Debug: Log number of total combinations
-    console.log(`Total combinations before filtering: ${allMenus.length}`);
-
-    // 4. Filter out menus containing paired spells
     const filteredMenus = allMenus.filter(menu => {
         for (let i = 0; i < menu.length; i++) {
             const spell = menu[i];
             const paired = pairedSpells[spell];
             if (paired && menu.includes(paired)) {
-                return false; // Invalid menu
+                return false;
             }
         }
-        return true; // Valid menu
+        return true;
     });
 
-    // Debug: Log number of valid combinations
-    console.log(`Total valid combinations after filtering: ${filteredMenus.length}`);
-
-    // 5. Calculate each menu's probability using sequential selection
     const menuProbabilities = filteredMenus.map(menu => {
         let prob = 1;
         let remainingOdds = Object.values(availableSpells).reduce((a, b) => a + b, 0);
@@ -159,10 +90,6 @@ function computeNextMenuOdds(spells, previousMenu) {
         return prob;
     });
 
-    // Debug: Log first 5 menu probabilities
-    console.log('Menu probabilities:', menuProbabilities);
-
-    // 6. Aggregate spell probabilities
     let spellProbabilities = {};
     for (const spell in spells) {
         spellProbabilities[spell] = 0;
@@ -174,30 +101,14 @@ function computeNextMenuOdds(spells, previousMenu) {
         });
     });
 
-    // 7. Convert probabilities to percentages with three decimal places
     for (const spell in spellProbabilities) {
         spellProbabilities[spell] = (spellProbabilities[spell] * 100).toFixed(3) + '%';
     }
-
-    // 8. Ensure total sum is 400%
-    let sumPercent = 0;
-    for (const spell in spellProbabilities) {
-        sumPercent += parseFloat(spellProbabilities[spell]);
-    }
-
-    // Debug: Log sum of probabilities before adjustment
-    console.log(`Sum of Probabilities before adjustment: ${sumPercent}%`);
-
-    // Debug: Log final spell probabilities
-    console.log('Final Spell Probabilities:', spellProbabilities);
 
     return spellProbabilities;
 }
 
 
-/**
- * Initializes the calculator by populating selectors and setting up event listeners.
- */
 function initializeCalculator() {
     const spellNames = Object.keys(baseSpells);
     const prevSelectors = ["prevSpell1", "prevSpell2", "prevSpell3", "prevSpell4"];
@@ -211,7 +122,6 @@ function initializeCalculator() {
         });
     });
 
-    // Prevent duplicate selections
     prevSelectors.forEach((id, index) => {
         const select = document.getElementById(id);
         select.addEventListener('change', () => {
@@ -225,53 +135,24 @@ function initializeCalculator() {
         });
     });
 
-    // Populate steadyState_select from csvData
-    if (typeof csvData !== 'undefined') {
-        const scenarios = parseSteadyStates(csvData);
-        const steadyStateSelect = document.getElementById('steadyState_select');
-        scenarios.forEach((scenario, index) => {
-            const option = document.createElement('option');
-            option.value = index; // Use index as value
-            option.textContent = scenario.name;
-            steadyStateSelect.appendChild(option);
-        });
-
-        // Store scenarios globally for later access
-        window.steadyStateScenarios = scenarios;
-    } else {
-        console.warn('steady_states.js did not define csvData.');
-    }
-
-    // Handle radio button changes
     const radioButtons = document.getElementsByName('prev_menu_option');
     const manualSelectionDiv = document.getElementById('manualSelection');
-    const steadyStateSelectionDiv = document.getElementById('steadyStateSelection');
 
     radioButtons.forEach(radio => {
         radio.addEventListener('change', () => {
             if (radio.value === 'manual') {
                 manualSelectionDiv.style.display = 'block';
-                steadyStateSelectionDiv.style.display = 'none';
-            } else if (radio.value === 'steady_state') {
-                manualSelectionDiv.style.display = 'none';
-                steadyStateSelectionDiv.style.display = 'block';
             } else {
                 manualSelectionDiv.style.display = 'none';
-                steadyStateSelectionDiv.style.display = 'none';
             }
         });
     });
 
-    // Handle Calculate button click
     const calculateButton = document.getElementById('calculateButton');
     calculateButton.addEventListener('click', calculateNextMenuOdds);
 }
 
-/**
- * Calculates and displays the next menu spell probabilities.
- */
 function calculateNextMenuOdds() {
-    // Gather modifiers
     const modifiers = {
         zoomModifier: document.getElementById('zoom_modifier').checked,
         metalOpponent: document.getElementById('metal_opponent').checked,
@@ -284,7 +165,6 @@ function calculateNextMenuOdds() {
         bounceModifier: document.getElementById('bounce_modifier').checked
     };
 
-    // Determine previous menu spells
     const selectedOption = document.querySelector('input[name="prev_menu_option"]:checked').value;
     let previousMenu = [];
 
@@ -293,7 +173,7 @@ function calculateNextMenuOdds() {
         previousMenu.push(document.getElementById('prevSpell2').value);
         previousMenu.push(document.getElementById('prevSpell3').value);
         previousMenu.push(document.getElementById('prevSpell4').value);
-        // Remove empty selections
+
         previousMenu = previousMenu.filter(spell => spell !== "");
     } else if (selectedOption === 'steady_state') {
         const steadyStateSelect = document.getElementById('steadyState_select');
@@ -310,18 +190,14 @@ function calculateNextMenuOdds() {
             return;
         }
     }
-    // If first_menu is selected, previousMenu remains empty
 
-    // Apply modifiers to spells
     let modifiedSpells = applyModifiers(baseSpells, modifiers);
 
-    // Compute next menu probabilities
     const result = computeNextMenuOdds(modifiedSpells, previousMenu);
 
-    // Display results
     const resultsDiv = document.getElementById('calculatorResults');
     const tbody = document.getElementById('calculatorResultsBody');
-    tbody.innerHTML = ''; // Clear previous results
+    tbody.innerHTML = '';
 
     let totalSum = 0;
 
@@ -335,15 +211,12 @@ function calculateNextMenuOdds() {
         row.appendChild(probCell);
         tbody.appendChild(row);
 
-        // Accumulate total sum
         totalSum += parseFloat(prob);
     }
 
     console.log(`Total Sum of Probabilities: ${totalSum}%`);
 
-    // Display the results div
     resultsDiv.style.display = 'block';
 }
 
-// Initialize the calculator when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initializeCalculator);
