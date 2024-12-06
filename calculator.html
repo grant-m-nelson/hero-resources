@@ -29,25 +29,28 @@
         <p>Use this tool to compute the probabilities of each spell appearing in the next menu based on the current game state, previous menu, and modifiers.</p>
         
         <form id="calculatorForm">
-            <h2>Modifiers</h2>
-            <input type="checkbox" id="zoom_modifier" name="zoom_modifier">
-            <label for="zoom_modifier">Zoom Modifier active</label><br>
-            <input type="checkbox" id="metal_opponent" name="metal_opponent">
-            <label for="metal_opponent">Metal Opponent present</label><br>
-            <input type="checkbox" id="last_30_seconds" name="last_30_seconds">
-            <label for="last_30_seconds">Last 30 seconds of match</label><br>
-            <input type="checkbox" id="heal_used_up" name="heal_used_up">
-            <label for="heal_used_up">Heal used up</label><br>
-            <input type="checkbox" id="psyche_up_active" name="psyche_up_active">
-            <label for="psyche_up_active">Psyche Up active</label><br>
-            <input type="checkbox" id="oomph_active" name="oomph_active">
-            <label for="oomph_active">Oomph active</label><br>
-            <input type="checkbox" id="acceleratle_active" name="acceleratle_active">
-            <label for="acceleratle_active">Acceleratle active</label><br>
-            <input type="checkbox" id="bounce_active" name="bounce_active">
-            <label for="bounce_active">Bounce active</label><br>
-            <input type="checkbox" id="bounce_modifier" name="bounce_modifier">
-            <label for="bounce_modifier">Bounce Modifier active</label><br>
+            <!-- Next Menu Modifiers -->
+            <h2>Next Menu Modifiers</h2>
+            <div id="nextMenuModifiersDiv">
+                <input type="checkbox" id="zoom_modifier" name="zoom_modifier">
+                <label for="zoom_modifier">Zoom Modifier active</label><br>
+                <input type="checkbox" id="metal_opponent" name="metal_opponent">
+                <label for="metal_opponent">Metal Opponent present</label><br>
+                <input type="checkbox" id="last_30_seconds" name="last_30_seconds">
+                <label for="last_30_seconds">Last 30 seconds of match</label><br>
+                <input type="checkbox" id="heal_used_up" name="heal_used_up">
+                <label for="heal_used_up">Heal used up</label><br>
+                <input type="checkbox" id="psyche_up_active" name="psyche_up_active">
+                <label for="psyche_up_active">Psyche Up active</label><br>
+                <input type="checkbox" id="oomph_active" name="oomph_active">
+                <label for="oomph_active">Oomph active</label><br>
+                <input type="checkbox" id="acceleratle_active" name="acceleratle_active">
+                <label for="acceleratle_active">Acceleratle active</label><br>
+                <input type="checkbox" id="bounce_active" name="bounce_active">
+                <label for="bounce_active">Bounce active</label><br>
+                <input type="checkbox" id="bounce_modifier" name="bounce_modifier">
+                <label for="bounce_modifier">Bounce Modifier active</label><br>
+            </div>
 
             <h2>Previous Menu</h2>
             <p>Select one of the following options to determine the previous menu spells:</p>
@@ -63,22 +66,52 @@
             <!-- Manual Selection Inputs -->
             <div id="manualSelection" style="display:none;">
                 <label for="prevSpell1">Previous Spell 1:</label>
-                <select id="prevSpell1"></select><br>
+                <select id="prevSpell1">
+                    <option value="">-- Select a Spell --</option>
+                </select><br>
                 <label for="prevSpell2">Previous Spell 2:</label>
-                <select id="prevSpell2"></select><br>
+                <select id="prevSpell2">
+                    <option value="">-- Select a Spell --</option>
+                </select><br>
                 <label for="prevSpell3">Previous Spell 3:</label>
-                <select id="prevSpell3"></select><br>
+                <select id="prevSpell3">
+                    <option value="">-- Select a Spell --</option>
+                </select><br>
                 <label for="prevSpell4">Previous Spell 4:</label>
-                <select id="prevSpell4"></select><br>
+                <select id="prevSpell4">
+                    <option value="">-- Select a Spell --</option>
+                </select><br>
             </div>
             
-            <!-- Steady State Selection -->
+            <!-- Steady State Selection and Modifiers -->
             <div id="steadyStateSelection" style="display:none;">
                 <label for="steadyState_select">Select Steady-State Scenario:</label>
                 <select id="steadyState_select">
                     <option value="none">-- Select a Scenario --</option>
                     <!-- Dynamic options will be populated by calculator.js -->
-                </select>
+                </select><br><br>
+                
+                <h2>Steady State Modifiers</h2>
+                <div id="steadyStateModifiersDiv">
+                    <input type="checkbox" id="steady_zoom_modifier" name="steady_zoom_modifier">
+                    <label for="steady_zoom_modifier">Zoom Modifier active</label><br>
+                    <input type="checkbox" id="steady_metal_opponent" name="steady_metal_opponent">
+                    <label for="steady_metal_opponent">Metal Opponent present</label><br>
+                    <input type="checkbox" id="steady_last_30_seconds" name="steady_last_30_seconds">
+                    <label for="steady_last_30_seconds">Last 30 seconds of match</label><br>
+                    <input type="checkbox" id="steady_heal_used_up" name="steady_heal_used_up">
+                    <label for="steady_heal_used_up">Heal used up</label><br>
+                    <input type="checkbox" id="steady_psyche_up_active" name="steady_psyche_up_active">
+                    <label for="steady_psyche_up_active">Psyche Up active</label><br>
+                    <input type="checkbox" id="steady_oomph_active" name="steady_oomph_active">
+                    <label for="steady_oomph_active">Oomph active</label><br>
+                    <input type="checkbox" id="steady_acceleratle_active" name="steady_acceleratle_active">
+                    <label for="steady_acceleratle_active">Acceleratle active</label><br>
+                    <input type="checkbox" id="steady_bounce_active" name="steady_bounce_active">
+                    <label for="steady_bounce_active">Bounce active</label><br>
+                    <input type="checkbox" id="steady_bounce_modifier" name="steady_bounce_modifier">
+                    <label for="steady_bounce_modifier">Bounce Modifier active</label><br>
+                </div>
             </div>
 
             <button type="button" id="calculateButton">Calculate Next Menu Odds</button>
