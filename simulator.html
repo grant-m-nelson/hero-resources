@@ -24,11 +24,13 @@
 
     <div class="container main-content">
         <h1>Menu Simulator</h1>
+        <p>A tool that allows you to simulate any number of menus given any set of modifiers; chunk size determines how many simulated menus to wait for between updating the results table.</p>
+        <br>
         <form id="simulationForm">
-            <label for="num_menus">Number of menus to simulate:</label>
+            <label for="num_menus"><strong>Number of menus to simulate:</strong></label>
             <input type="number" id="num_menus" name="num_menus" value="10000" min="1">
             <br>
-            <label for="chunk_size">Chunk size:</label>
+            <label for="chunk_size"><strong>Chunk size:</strong></label>
             <input type="number" id="chunk_size" name="chunk_size" value="1000" min="1">
             <br>
 
@@ -67,7 +69,7 @@
         <div id="results">
             <h2>Results:</h2>
             <div id="progress"></div>
-            <table id="resultsTable" class="resultsTable">
+            <table id="simulatorResultsTable" class="resultsTable">
                 <thead>
                     <tr>
                         <th>Spell</th>
@@ -84,7 +86,7 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 ant_ssb. Feel free to use for whatever with credit :)</p>
+            <p>&copy; 2024 @ant_ssb. Feel free to use for whatever with credit :)</p>
         </div>
     </footer>
 </body>

@@ -22,13 +22,40 @@
     </header>
 
     <div class="container main-content">
-        <h2>Welcome to Hero's Menu</h2>
-        <p>This is the home page of Hero's Menu. Choose a tab above to get started.</p>
+        <h2>Menu Theory</h2>
+        
+        <p>The spells on the menu are randomly selected from top to bottom. Each spell is “weighted” differently than all the others, influencing their likelihood of appearing. Several factors can modify the pool of available spells, primarily through the use of modifiers and specific conditions within the game.</p>
+
+        <h3>Modifiers</h3>
+        <p>There are four known relevant modifiers that affect the spell weights:</p>
+        <ul>
+            <li><strong>Proximity to Side Camera/Zoom Modifier:</strong> When within 40 units (a quarter the length of FD) to the side camera, the weight of <em>Zoom</em> is multiplied by three.</li>
+            <li><strong>Metal Opponent Present:</strong> When a metal opponent is present (when another hero player uses <em>Kaclang</em>), the weight of <em>Metal Slash</em> is multiplied by four.</li>
+            <li><strong>Post-Bounce Disappearance/Bounce Modifier:</strong> For 12 seconds after <em>Bounce</em> disappears, the weight of <em>Bounce</em> is multiplied by 1/5.</li>
+            <li><strong>Bounce Active:</strong> While <em>Bounce</em> is active:
+                <ul>
+                    <li>The weights of <em>Acceleratle</em> and <em>Oomph</em> are each multiplied by 1/2.</li>
+                    <li>The weights of <em>Heal</em> and <em>Kaclang</em> are each multiplied by 4/5.</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Removing Spells from the Pool</h3>
+        <p>In addition to modifiers, certain conditions can remove spells from the pool:</p>
+        <ul>
+            <li><strong>Heal:</strong> Has 2 uses per stock. Once it has been used twice, it is removed from the pool for the remainder of that stock.</li>
+            <li><strong>Kaclang:</strong> Removed from the pool during the last 30 seconds of a match.</li>
+            <li><strong>Active Buffs:</strong> All buffs (<em>Acceleratle</em>, <em>Oomph</em>, <em>Psyche Up</em>, and <em>Bounce</em>) are removed from the pool when active.</li>
+            <li><strong>Previous Menu:</strong> A spell cannot appear on two consecutive menus. Pulling a menu without a specific spell first can significantly increase the odds of that spell appearing. After such a pull, the menu is referred to as “primed”. Different spells are affected differently by a primed menu, and these average changes are calculated in the basic calculator.</li>
+        </ul>
+
+        <h3>Primed Menus</h3>
+        <p>When fishing for a specific spell, pulling a menu without that spell first can drastically increase its chances of appearing in subsequent menus. This state is known as a “primed” menu. The effect of a primed menu varies depending on the spell, and these average changes are factored into the Averages tab to provide accurate probability adjustments.</p>
     </div>
 
     <footer>
         <div class="container">
-            <p>&copy; 2024 ant_ssb. Feel free to use for whatever with credit :)</p>
+            <p>&copy; 2024 @ant_ssb. Feel free to use for whatever with credit :)</p>
         </div>
     </footer>
 </body>

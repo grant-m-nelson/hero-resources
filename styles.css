@@ -65,15 +65,15 @@ footer {
 #results {
     display: none;
 }
-#resultsTable {
+.resultsTable {
     border-collapse: collapse;
 }
-#resultsTable th,
-#resultsTable td {
+.resultsTable th,
+.resultsTable td {
     border: 1px solid black;
     padding: 5px;
     text-align: center;
 }
-#resultsTable th {
+.resultsTable th {
     background-color: #f2f2f2;
 }
