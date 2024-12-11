@@ -112,8 +112,13 @@ function computeNextMenuOdds(spells, previousMenu) {
 function initializeCalculator() {
     const spellNames = Object.keys(baseSpells);
     const prevSelectors = ["prevSpell1", "prevSpell2", "prevSpell3", "prevSpell4"];
+
     prevSelectors.forEach(id => {
         const select = document.getElementById(id);
+        // Add a default empty option
+        const defaultOption = document.createElement('option');
+        defaultOption.value = "";
+
         spellNames.forEach(spell => {
             const option = document.createElement('option');
             option.value = spell;
@@ -122,14 +127,29 @@ function initializeCalculator() {
         });
     });
 
+    // Update the event listener to disable linked spells
     prevSelectors.forEach((id, index) => {
         const select = document.getElementById(id);
         select.addEventListener('change', () => {
-            const selectedSpells = prevSelectors.map(selId => document.getElementById(selId).value);
+            const selectedSpells = prevSelectors
+                .map(selId => document.getElementById(selId).value)
+                .filter(val => val !== "");
+
+            // Create a set of spells to disable (selected spells and their paired spells)
+            const spellsToDisable = new Set(selectedSpells);
+
+            selectedSpells.forEach(spell => {
+                const paired = pairedSpells[spell];
+                if (paired) {
+                    spellsToDisable.add(paired);
+                }
+            });
+
             prevSelectors.forEach(selId => {
                 const sel = document.getElementById(selId);
                 Array.from(sel.options).forEach(option => {
-                    option.disabled = selectedSpells.includes(option.value) && option.value !== sel.value;
+                    // Disable if the option is in spellsToDisable and not the current value
+                    option.disabled = spellsToDisable.has(option.value) && option.value !== sel.value;
                 });
             });
         });
