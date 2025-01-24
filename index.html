@@ -24,7 +24,62 @@
     <div class="container main-content">
         <h2>Menu Theory</h2>
         
-        <p>The spells on the menu are randomly selected from top to bottom. Each spell is “weighted” differently than all the others, influencing their likelihood of appearing. Several factors can modify the pool of available spells, primarily through the use of modifiers and specific conditions within the game.</p>
+        <p>The spells on the menu are randomly selected from top to bottom. Each spell is “weighted” differently than all the others, influencing their likelihood of appearing. Several factors can modify the pool of available spells, primarily due to the modifiers and what spells were on the last menu. There are additionally 3 pairs of spells that cannot appear on the same menu together; these are Kaboom/Bang, Sizzle/Sizz, and Thwack/Whack.</p>
+        
+        <h3>Base Spell Weights</h3>
+        <table class="resultsTable">
+            <thead>
+                <tr>
+                    <th>Sizz</th>
+                    <th>Sizzle</th>
+                    <th>Bang</th>
+                    <th>Kaboom</th>
+                    <th>Snooze</th>
+                    <th>Flame Slash</th>
+                    <th>Kacrackle Slash</th>
+                    <th>Metal Slash</th>
+                    <th>Hatchet Man</th>
+                    <th>Whack</th>
+                    <th>Thwack</th>
+                    <th>Magic Burst</th>
+                    <th>Kamikazee</th>
+                    <th>Psyche Up</th>
+                    <th>Oomph</th>
+                    <th>Acceleratle</th>
+                    <th>Kaclang</th>
+                    <th>Bounce</th>
+                    <th>Heal</th>
+                    <th>Hocus Pocus</th>
+                    <th>Zoom</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>16</td>
+                    <td>20</td>
+                    <td>16</td>
+                    <td>20</td>
+                    <td>17</td>
+                    <td>18</td>
+                    <td>18</td>
+                    <td>7</td>
+                    <td>18</td>
+                    <td>8</td>
+                    <td>12</td>
+                    <td>5</td>
+                    <td>5</td>
+                    <td>16</td>
+                    <td>16</td>
+                    <td>16</td>
+                    <td>5</td>
+                    <td>16</td>
+                    <td>7</td>
+                    <td>3</td>
+                    <td>15</td>
+                </tr>
+            </tbody>
+        </table>
+        
 
         <h3>Modifiers</h3>
         <p>There are four known relevant modifiers that affect the spell weights:</p>
@@ -50,7 +105,7 @@
         </ul>
 
         <h3>Primed Menus</h3>
-        <p>When fishing for a specific spell, pulling a menu without that spell first can drastically increase its chances of appearing in subsequent menus. This state is known as a “primed” menu. The effect of a primed menu varies depending on the spell, and these average changes are factored into the Averages tab to provide accurate probability adjustments.</p>
+        <p>When fishing for a specific spell, pulling a menu without that spell first can drastically increase its chances of appearing in subsequent menus. This state is known as a “primed” menu for said spell. The effect of a primed menu varies depending on the spell, and these average changes are factored into the Averages tab to provide accurate probability adjustments.</p>
     </div>
 
     <footer>
