@@ -1,1 +1,1 @@
-temp repository for hero stuff i'm working on
+Repository for my full menu calculator. More info on the deployed page [here](https://grant-m-nelson.github.io/hero-resources/index.html).
